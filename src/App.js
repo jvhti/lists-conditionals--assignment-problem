@@ -1,7 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
+import ValidationComponent from "./ValidationComponent";
+import CharComponent from "./CharComponent";
 
 class App extends Component {
+  state = {
+    text: ""
+  };
+
+  inputChangedHandler = (ev) => {
+    this.setState({text: ev.target.value});
+  };
+
+  deleteLetterHandler = (i) => {
+    const text = this.state.text.split("");
+
+    text.splice(i, 1);
+
+    this.setState({text: text.join("")});
+  };
+
   render() {
     return (
       <div className="App">
@@ -14,6 +32,11 @@ class App extends Component {
           <li>When you click a CharComponent, it should be removed from the entered text.</li>
         </ol>
         <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
+        <input type="text" onChange={this.inputChangedHandler} value={this.state.text}/> <br/>
+        <p>{this.state.text.length}</p>
+        <ValidationComponent length={this.state.text.length}/><br/>
+        {this.state.text.split("").map((letter, i) =>
+            <CharComponent key={letter+i} letter={letter} click={() => this.deleteLetterHandler(i)}/>)}
       </div>
     );
   }
